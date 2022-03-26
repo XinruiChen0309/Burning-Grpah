@@ -50,21 +50,21 @@ def is_burned(T, num_source, num_round):
     
     while num_source > 0:
         B = get_B(T, num_round)
-        N = B.shape[0] #print("B is \n", B)
-        # 2.1 case1: burned before running our of sources
+        N = B.shape[0]
+        
+        # 2.1 case1: burned before running out of sources
         if N == 0 or N == 1:
             return True
-        # 2.2 mark the row which contains max non-zero indexs
+        
+        # 2.2 mark the row which contains most non-zero indexs
         max_idx = -1
         max = 0  
         
-        # 2.2.1 walk through the rows to find max
+        # 2.2+ walk through the rows to find max
         for j in range(N):
            if np.count_nonzero(B[j]) > max:
-               #print(B[j])
                max = np.count_nonzero(B[j])
                max_idx = j
-        #print(max, max_idx)
         
         # 2.3 delete the rows and cols
         
@@ -75,23 +75,26 @@ def is_burned(T, num_source, num_round):
             if B[max_idx][k] != 0:
                 to_delete.append(k)
         to_delete.reverse()
-        #print(to_delete)
-        
+ 
+        # 2.3.2 delete the row and columns
         for k in range(len(to_delete)):
             B = np.delete(B, to_delete[k], 0)
             B = np.delete(B, to_delete[k], 1)
                 
-        print(num_source, "sources remained\n", B)
         
         num_source = num_source - 1 #update sources 
+        num_round = num_round - 1 #update rounds comment this line if each source burn for k rounds
         
     #case2: the graph being burned at last round
     return (B.shape[0] == 0)
 
-#Work space
-T1 = generate_random_matrix(4)
+# Work space
+A_dimension = 4
+source = 2
+round = 1
+T1 = generate_random_matrix(A_dimension)
 print("test matrix is \n", T1)
-print(is_burned(T1, 2, 1))
+print(is_burned(T1, source, round))
             
             
         
