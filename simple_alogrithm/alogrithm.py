@@ -40,7 +40,7 @@ input:
   number of sources
   number of rounds
 output:
-  boolean: whether the graph can be burned with num_source sources which will all burn num_round rounds
+  boolean: whether the graph can be burned with num_source sources which will all burn descending/num_round rounds
 '''
 def is_burned(T, num_source, num_round):
     # S1: get B
@@ -83,7 +83,7 @@ def is_burned(T, num_source, num_round):
                 
         
         num_source = num_source - 1 #update sources 
-        num_round = num_round - 1 #update rounds comment this line if each source burn for k rounds
+        num_round = num_round - 1 #update rounds comment this line if each source burn for same number of rounds
         
     #case2: the graph being burned at last round
     return (B.shape[0] == 0)
