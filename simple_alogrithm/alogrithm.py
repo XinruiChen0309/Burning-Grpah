@@ -40,16 +40,18 @@ input:
   number of sources
   number of rounds
 output:
-  boolean: whether the graph can be burned with num_source sources which will all burn descending/num_round rounds
+  boolean: whether the graph can be burned with num_source sources which will all burn num_round rounds
 '''
 def is_burned(T, num_source, num_round):
     # S1: get B
-    
-
+    B = get_B(T, num_round)
+    de = 0
     # S2: burn the graph
     
     while num_source > 0:
-        B = get_B(T, num_round)
+        if de == 1:
+            B = get_B(B, num_round)
+        de = 1
         N = B.shape[0]
         
         # 2.1 case1: burned before running out of sources
@@ -75,16 +77,18 @@ def is_burned(T, num_source, num_round):
             if B[max_idx][k] != 0:
                 to_delete.append(k)
         to_delete.reverse()
+        print(to_delete)
  
         # 2.3.2 delete the row and columns
         for k in range(len(to_delete)):
+            print(B)
             B = np.delete(B, to_delete[k], 0)
             B = np.delete(B, to_delete[k], 1)
                 
         
         num_source = num_source - 1 #update sources 
-        num_round = num_round - 1 #update rounds comment this line if each source burn for same number of rounds
-        
+        num_round = num_round - 1 #update rounds comment this line if each source burn for k rounds
+        print(max_idx, max, B)
     #case2: the graph being burned at last round
     return (B.shape[0] == 0)
 
@@ -94,7 +98,12 @@ source = 2
 round = 1
 T1 = generate_random_matrix(A_dimension)
 print("test matrix is \n", T1)
-print(is_burned(T1, source, round))
+T2 = np.array([
+    [0, 0, 1, 0,],
+    [0, 0, 0, 1,],
+    [1, 0, 0, 0,],
+    [0, 1, 0, 0,]])
+print(is_burned(T2, source, round))
             
             
         
